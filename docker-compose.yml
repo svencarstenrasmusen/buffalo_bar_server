@@ -3,16 +3,38 @@ services:
     container_name: postgres
     image: postgres
     environment:
-      POSTGRES_USER: buffalo
-      POSTGRES_PASSWORD: buffalo
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
     ports:
-      - "5332:5432"
+      - ${DB_PORT}:5432
     networks:
       - db
     restart: unless-stopped
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=${KC_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KC_ADMIN_PASS}
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HTTP_ENABLED=true
+      - KC_DB=${DB_TYPE}
+      - KC_DB_URL=jdbc:postgresql://${DB_DOMAIN}:${DB_PORT}/${DB_KEYCLOAK}
+      - KC_DB_USERNAME=${DB_USER}
+      - KC_DB_PASSWORD=${DB_PASS}
+    command: start-dev
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - db
+
 
 networks:
   db:
