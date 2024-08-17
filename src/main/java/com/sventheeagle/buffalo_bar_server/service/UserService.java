@@ -18,8 +18,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getUserById(@NonNull String id) {
-        return userRepository.findById(id);
+    public User getUserById(@NonNull String id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User does not exist."));
     }
 
     public List<User> getAllUsers() {
