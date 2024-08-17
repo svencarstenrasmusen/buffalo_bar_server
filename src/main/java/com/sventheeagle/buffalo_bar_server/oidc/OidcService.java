@@ -81,7 +81,7 @@ public class OidcService {
                 .secure(true)
                 .path("/")
                 .domain("localhost")
-                .maxAge(300)
+                .maxAge(3600)
                 .build();
     }
 }
