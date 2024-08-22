@@ -1,5 +1,9 @@
 package com.sventheeagle.buffalo_bar_server.oidc;
 
+import com.sventheeagle.buffalo_bar_server.jwt.JWTDecoder;
+import com.sventheeagle.buffalo_bar_server.model.Player;
+import com.sventheeagle.buffalo_bar_server.repository.PlayerRepository;
+import com.sventheeagle.buffalo_bar_server.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,11 +14,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class OidcService {
+
+    private final PlayerRepository playerRepository;
+    private final PlayerService playerService;
 
     @Value("${OIDC_ISSUER}")
     private String oidcIssuer;
@@ -24,6 +31,11 @@ public class OidcService {
     private String clientId;
     @Value("${OIDC_CLIENT_SECRET}")
     private String secret;
+
+    public OidcService(PlayerRepository playerRepository, PlayerService playerService) {
+        this.playerRepository = playerRepository;
+        this.playerService = playerService;
+    }
 
     public HashMap<String, Object> authenticate(OidcDTO oidcDto) {
         String tokenEndpoint = oidcIssuer + "/protocol/openid-connect/token";
@@ -53,24 +65,30 @@ public class OidcService {
 
         //Get accessToken
         String accessToken = Objects.requireNonNull(oidcResponse.getBody()).get("access_token").toString();
-        String refreshToken = Objects.requireNonNull(oidcResponse.getBody()).get("refresh_token").toString();
-        String idToken = Objects.requireNonNull(oidcResponse.getBody()).get("id_token").toString();
 
         //Prepare response
         HashMap<String, Object> payloadMap = new HashMap<>();
         payloadMap.put("accessToken", accessToken);
-        payloadMap.put("refreshToken", refreshToken);
-        payloadMap.put("idToken", idToken);
 
         //Prepare Cookie
         ResponseCookie accessTokenCookie = createCookie("accessToken", accessToken);
-        ResponseCookie refreshTokenCookie = createCookie("refreshToken", refreshToken);
-        ResponseCookie idTokenCookie = createCookie("idToken", idToken);
 
         //Add cookie to response
         payloadMap.put("accessTokenCookie", accessTokenCookie);
-        payloadMap.put("refreshTokenCookie", refreshTokenCookie);
-        payloadMap.put("idTokenCookie", idTokenCookie);
+
+        //Extract Authenticated User's ID
+        Map<String, Object> player = extractUserInfo(accessToken);
+
+        //Check If First Login
+        if (isFirstLogin(player.get("sub").toString())) {
+            Player newPlayer = new Player();
+            newPlayer.setId(player.get("sub").toString());
+            newPlayer.setEmail(player.get("email").toString());
+            newPlayer.setUsername(player.get("preferred_username").toString());
+            saveNewPlayer(newPlayer);
+        }
+
+        payloadMap.put("player", playerService.getPlayerById(player.get("sub").toString()));
 
         return payloadMap;
     }
@@ -83,5 +101,17 @@ public class OidcService {
                 .domain("localhost")
                 .maxAge(3600)
                 .build();
+    }
+
+    private Map<String, Object> extractUserInfo(String token) {
+        return new JWTDecoder().decodeJWTPayload(token);
+    }
+
+    private boolean isFirstLogin(String userId) {
+        return !playerRepository.existsById(userId);
+    }
+
+    private void saveNewPlayer(Player player) {
+        playerRepository.save(player);
     }
 }
