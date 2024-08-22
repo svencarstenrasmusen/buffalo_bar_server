@@ -15,8 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Buffalo_User")
-public class User {
+@Table(name = "player")
+public class Player {
     @Id
     private String id;
 

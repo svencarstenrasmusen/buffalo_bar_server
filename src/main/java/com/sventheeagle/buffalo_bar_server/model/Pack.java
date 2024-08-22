@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Buffalo_Group")
-public class Group {
+@Table(name = "pack")
+public class Pack {
     @Id
     @UuidGenerator
     private String id;
