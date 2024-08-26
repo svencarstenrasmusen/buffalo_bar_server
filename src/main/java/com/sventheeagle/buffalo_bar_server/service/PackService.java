@@ -1,11 +1,14 @@
 package com.sventheeagle.buffalo_bar_server.service;
 
-import com.sventheeagle.buffalo_bar_server.dto.PackCreatDTO;
+import com.sventheeagle.buffalo_bar_server.dto.AddPlayerToPackDTO;
+import com.sventheeagle.buffalo_bar_server.dto.PackCreateDTO;
 import com.sventheeagle.buffalo_bar_server.model.Pack;
+import com.sventheeagle.buffalo_bar_server.model.Player;
 import com.sventheeagle.buffalo_bar_server.repository.PackRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,7 +21,7 @@ public class PackService {
         this.packRepository = packRepository;
     }
 
-    public Pack createPack(PackCreatDTO dto) {
+    public Pack createPack(PackCreateDTO dto) {
         Pack pack = new Pack();
         pack.setName(dto.name());
 

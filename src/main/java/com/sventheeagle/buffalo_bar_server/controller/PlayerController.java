@@ -32,4 +32,9 @@ public class PlayerController {
     public ResponseEntity<Player> getPlayerById(@PathVariable("id") String id) {
         return new ResponseEntity<>(playerService.getPlayerById(id), HttpStatus.OK);
     }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Player> getPlayerByUsername(@PathVariable("username") String username) {
+        return new ResponseEntity<>(playerService.getPlayerByUsername(username), HttpStatus.OK);
+    }
 }

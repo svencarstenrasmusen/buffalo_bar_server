@@ -20,6 +20,7 @@ public class Pack {
     @UuidGenerator
     private String id;
 
+    @Column(updatable = false, unique = true)
     private String name;
 
     @Column(updatable = false)

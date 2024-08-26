@@ -1,9 +1,6 @@
 package com.sventheeagle.buffalo_bar_server.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,7 @@ public class Player {
     @Id
     private String id;
 
+    @Column(nullable = false, unique = true)
     private String username;
     private String email;
     private LocalDateTime createdAt;

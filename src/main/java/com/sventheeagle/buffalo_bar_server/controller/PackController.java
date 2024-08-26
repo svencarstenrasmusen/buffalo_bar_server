@@ -1,6 +1,6 @@
 package com.sventheeagle.buffalo_bar_server.controller;
 
-import com.sventheeagle.buffalo_bar_server.dto.PackCreatDTO;
+import com.sventheeagle.buffalo_bar_server.dto.PackCreateDTO;
 import com.sventheeagle.buffalo_bar_server.model.Pack;
 import com.sventheeagle.buffalo_bar_server.service.PackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +32,7 @@ public class PackController {
     }
 
     @PostMapping
-    public ResponseEntity<Pack> createGroup(@RequestBody PackCreatDTO dto) {
+    public ResponseEntity<Pack> createGroup(@RequestBody PackCreateDTO dto) {
         return new ResponseEntity<>(packService.createPack(dto), HttpStatus.OK);
     }
 }

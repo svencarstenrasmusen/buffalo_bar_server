@@ -23,4 +23,8 @@ public class PlayerService {
     public List<Player> getAllPlayers() {
         return playerRepository.findAll();
     }
+
+    public Player getPlayerByUsername(String username) {
+        return playerRepository.findByUsername(username);
+    }
 }
