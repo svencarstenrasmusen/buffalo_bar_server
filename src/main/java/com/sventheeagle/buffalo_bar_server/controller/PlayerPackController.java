@@ -30,4 +30,9 @@ public class PlayerPackController {
     public ResponseEntity<List<PlayerPack>> getAllPlayerFromPack(@PathVariable("id") String id) {
         return new ResponseEntity<>(playerPackService.getPlayersByPackId(id), HttpStatus.OK);
     }
+
+    @GetMapping("/packs/{id}")
+    public ResponseEntity<List<PlayerPack>> getAllPacksFromPlayer(@PathVariable("id") String id) {
+        return new ResponseEntity<>(playerPackService.findPackByPlayerId(id), HttpStatus.OK);
+    }
 }
