@@ -3,6 +3,7 @@ package com.sventheeagle.buffalo_bar_server.controller;
 import com.sventheeagle.buffalo_bar_server.dto.CreateBuffaloDTO;
 import com.sventheeagle.buffalo_bar_server.model.Buffalo;
 import com.sventheeagle.buffalo_bar_server.service.BuffaloService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/buffalo")
+@Tag(name = "Buffalo")
 public class BuffaloController {
     private final BuffaloService buffaloService;
 

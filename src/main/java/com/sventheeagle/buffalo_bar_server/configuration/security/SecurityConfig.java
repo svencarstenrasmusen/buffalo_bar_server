@@ -46,7 +46,7 @@ public class SecurityConfig {
     }
 
 
-    /**@Bean
+    @Bean
     public BearerTokenResolver bearerTokenResolver() {
         return new BearerResolver();
     }
@@ -62,5 +62,5 @@ public class SecurityConfig {
                     .findFirst()
                     .orElse(null);
         }
-    }*/
+    }
 }

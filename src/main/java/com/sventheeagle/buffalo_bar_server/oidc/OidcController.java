@@ -4,6 +4,8 @@ import com.sventheeagle.buffalo_bar_server.model.Player;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("api/oidc")
+@Tag(name = "OIDC")
 public class OidcController {
 
     private final OidcService oidcService;

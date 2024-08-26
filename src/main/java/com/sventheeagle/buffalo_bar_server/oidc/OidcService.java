@@ -99,7 +99,7 @@ public class OidcService {
                 .secure(true)
                 .path("/")
                 .domain("localhost")
-                .maxAge(3600)
+                .maxAge(1800)
                 .build();
     }
 
