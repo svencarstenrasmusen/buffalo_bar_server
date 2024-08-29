@@ -16,7 +16,7 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public Player getPlayerById(@NonNull String id) {
+    public Player getPlayerById(String id) {
         return playerRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Player does not exist."));
     }
 
@@ -25,6 +25,10 @@ public class PlayerService {
     }
 
     public Player getPlayerByUsername(String username) {
-        return playerRepository.findByUsername(username);
+        if (playerRepository.findByUsername(username) == null) {
+            throw new NoSuchElementException("Player not found");
+        } else {
+            return getPlayerById(playerRepository.findByUsername(username).getId());
+        }
     }
 }

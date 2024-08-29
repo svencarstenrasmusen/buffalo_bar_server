@@ -1,7 +1,6 @@
 package com.sventheeagle.buffalo_bar_server.controller;
 
 import com.sventheeagle.buffalo_bar_server.dto.AddPlayerToPackDTO;
-import com.sventheeagle.buffalo_bar_server.model.Player;
 import com.sventheeagle.buffalo_bar_server.model.PlayerPack;
 import com.sventheeagle.buffalo_bar_server.service.PlayerPackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
