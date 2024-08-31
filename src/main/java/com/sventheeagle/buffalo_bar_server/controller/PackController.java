@@ -1,8 +1,10 @@
 package com.sventheeagle.buffalo_bar_server.controller;
 
+import com.sventheeagle.buffalo_bar_server.dto.AddPlayerToPackDTO;
 import com.sventheeagle.buffalo_bar_server.dto.PackCreateDTO;
 import com.sventheeagle.buffalo_bar_server.model.Pack;
 import com.sventheeagle.buffalo_bar_server.service.PackService;
+import com.sventheeagle.buffalo_bar_server.service.PlayerPackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ import java.util.List;
 public class PackController {
 
     private final PackService packService;
+    private final PlayerPackService playerPackService;
 
-    public PackController(PackService packService) {
+    public PackController(PackService packService, PlayerPackService playerPackService) {
         this.packService = packService;
+        this.playerPackService = playerPackService;
     }
 
     @GetMapping("{id}")
@@ -33,6 +37,14 @@ public class PackController {
 
     @PostMapping
     public ResponseEntity<Pack> createGroup(@RequestBody PackCreateDTO dto) {
-        return new ResponseEntity<>(packService.createPack(dto), HttpStatus.OK);
+        Pack createdPack = packService.createPack(dto);
+        AddPlayerToPackDTO addDto = new AddPlayerToPackDTO(
+                dto.playerId(),
+                createdPack.getId(),
+                true
+        );
+
+        playerPackService.addPlayerToPack(addDto);
+        return new ResponseEntity<>(createdPack, HttpStatus.OK);
     }
 }

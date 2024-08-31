@@ -20,11 +20,11 @@ public class Buffalo {
     @UuidGenerator
     private String id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "scalper", nullable = false)
     private Player scalper;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "snaggee", nullable = false)
     private Player snaggee;
 
