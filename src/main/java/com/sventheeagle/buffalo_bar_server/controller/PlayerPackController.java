@@ -1,9 +1,11 @@
 package com.sventheeagle.buffalo_bar_server.controller;
 
 import com.sventheeagle.buffalo_bar_server.dto.AddPlayerToPackDTO;
+import com.sventheeagle.buffalo_bar_server.model.Player;
 import com.sventheeagle.buffalo_bar_server.model.PlayerPack;
 import com.sventheeagle.buffalo_bar_server.service.PlayerPackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +35,10 @@ public class PlayerPackController {
     @GetMapping("/packs/{id}")
     public ResponseEntity<List<PlayerPack>> getAllPacksFromPlayer(@PathVariable("id") String id) {
         return new ResponseEntity<>(playerPackService.findPackByPlayerId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/friends/{id}")
+    public ResponseEntity<List<Player>> getFriends(@PathVariable("id") String id) {
+        return new ResponseEntity<>(playerPackService.getFriendsByPlayerId(id), HttpStatus.OK);
     }
 }

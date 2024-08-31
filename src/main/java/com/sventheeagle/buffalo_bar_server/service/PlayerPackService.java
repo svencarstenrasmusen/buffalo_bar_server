@@ -5,9 +5,11 @@ import com.sventheeagle.buffalo_bar_server.model.Pack;
 import com.sventheeagle.buffalo_bar_server.model.Player;
 import com.sventheeagle.buffalo_bar_server.model.PlayerPack;
 import com.sventheeagle.buffalo_bar_server.repository.PlayerPackRepository;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,5 +43,28 @@ public class PlayerPackService {
 
     public List<PlayerPack> getPlayersByPackId(String id) {
         return playerPackRepository.findAllByPackId(id);
+    }
+
+    public List<Player> getFriendsByPlayerId(String id) {
+        List<PlayerPack> playerPacks = findPackByPlayerId(id);
+        List<Pack> currentPlayersPacks = playerPacks.stream().map(PlayerPack::getPack).toList();
+        List<Player> friends = new ArrayList<>();
+
+        List<PlayerPack> current;
+        List<Player> currentPlayers;
+        for (int i = 0; i < currentPlayersPacks.size(); i++) {
+
+            current = getPlayersByPackId(currentPlayersPacks.get(i).getId());
+            currentPlayers = current.stream().map(PlayerPack::getPlayer).toList();
+
+            for (int j = 0; j < currentPlayers.size(); j++) {
+                if (!friends.contains(currentPlayers.get(j))) {
+                    friends.add(currentPlayers.get(j));
+                }
+            }
+        }
+
+        friends.remove(playerService.getPlayerById(id));
+        return friends;
     }
 }
